@@ -6,6 +6,9 @@ import com.greenblat.socialmedia.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -32,5 +35,12 @@ public class PostService {
 
     public void deletePost(Long id) {
         postRepository.deleteById(id);
+    }
+
+    public List<PostDTO> getPostsByUser(Long userId) {
+        var posts = postRepository.findByAuthor_Id(userId);
+        return posts.stream()
+                .map(postMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 }

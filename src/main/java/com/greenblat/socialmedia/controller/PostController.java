@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/post")
 @RequiredArgsConstructor
@@ -31,5 +33,11 @@ public class PostController {
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/by-user/{userId}")
+    public ResponseEntity<List<PostDTO>> getUserPosts(@PathVariable Long userId) {
+        var posts = postService.getPostsByUser(userId);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 }
