@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -24,8 +26,7 @@ public class UserService {
         var user = findUser(userDetails.getUsername());
         var followingUser = findUser(followingUserId);
 
-        var followingUserToCurrentUserRelation = userRelationRepository
-                .findByRelatingUserAndFollowingUser(followingUser, user);
+        var followingUserToCurrentUserRelation = findUserRelation(followingUser, user);
 
         if (followingUserToCurrentUserRelation.isPresent()) {
             acceptFriendRequest(user, followingUser, followingUserToCurrentUserRelation.get());
@@ -43,8 +44,7 @@ public class UserService {
             var user = findUser(userDetails.getUsername());
             var followingUser = findUser(friendRequestId);
 
-            var userRelation = userRelationRepository
-                    .findByRelatingUserAndFollowingUser(followingUser, user)
+            var userRelation = findUserRelation(followingUser, user)
                     .orElseThrow();
 
             if (userRelation.getRelationType().equals(RelationType.FRIEND)) {
@@ -61,8 +61,7 @@ public class UserService {
         var followingUser = findUser(followingUserId);
         userRelationRepository.deleteByRelatingUserAndFollowingUser(user, followingUser);
 
-        userRelationRepository
-                .findByRelatingUserAndFollowingUser(followingUser, user)
+        findUserRelation(followingUser, user)
                 .ifPresent(userRelation -> updateUserRelation(userRelation, RelationType.FOLLOWER));
     }
 
@@ -78,6 +77,11 @@ public class UserService {
     private void updateUserRelation(UserRelation userRelation, RelationType relationType) {
         userRelation.setRelationType(relationType);
         userRelationRepository.save(userRelation);
+    }
+
+    private Optional<UserRelation> findUserRelation(User followingUser, User currentUser) {
+        return userRelationRepository
+                .findByRelatingUserAndFollowingUser(followingUser, currentUser);
     }
 
     private User findUser(String username) {
