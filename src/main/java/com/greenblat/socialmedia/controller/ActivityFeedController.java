@@ -1,9 +1,9 @@
 package com.greenblat.socialmedia.controller;
 
+import com.greenblat.socialmedia.dto.PageResponse;
 import com.greenblat.socialmedia.dto.PostDTO;
 import com.greenblat.socialmedia.service.ActivityFeedService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,9 +21,9 @@ public class ActivityFeedController {
     private final ActivityFeedService activityFeedService;
 
     @GetMapping("/posts")
-    public ResponseEntity<Page<PostDTO>> getPosts(@RequestParam(value = "page", defaultValue = "0") Integer page,
+    public ResponseEntity<PageResponse<PostDTO>> getPosts(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                                   @AuthenticationPrincipal UserDetails userDetails) {
         var posts = activityFeedService.getPostsByFollowerUser(page, userDetails);
-        return ResponseEntity.ok(posts);
+        return ResponseEntity.ok(PageResponse.of(posts));
     }
 }
