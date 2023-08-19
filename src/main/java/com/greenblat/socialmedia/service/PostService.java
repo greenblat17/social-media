@@ -3,7 +3,9 @@ package com.greenblat.socialmedia.service;
 import com.greenblat.socialmedia.dto.PostDTO;
 import com.greenblat.socialmedia.mapper.PostMapper;
 import com.greenblat.socialmedia.repository.PostRepository;
+import com.greenblat.socialmedia.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +16,13 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
     private final PostMapper postMapper;
 
-    public PostDTO savePost(PostDTO postDTO) {
-        var post = postMapper.mapToPost(postDTO, null);
+    public PostDTO savePost(PostDTO postDTO, UserDetails userDetails) {
+        var user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow();
+        var post = postMapper.mapToPost(postDTO, user);
         var savedPost = postRepository.save(post);
         return postMapper.mapToDto(savedPost);
     }

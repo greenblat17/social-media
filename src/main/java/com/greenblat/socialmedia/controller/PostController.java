@@ -5,6 +5,8 @@ import com.greenblat.socialmedia.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +19,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/")
-    public ResponseEntity<PostDTO> addPost(@RequestBody PostDTO postDTO) {
-        var savedPost = postService.savePost(postDTO);
+    public ResponseEntity<PostDTO> addPost(@RequestBody PostDTO postDTO,
+                                           @AuthenticationPrincipal UserDetails userDetails) {
+        var savedPost = postService.savePost(postDTO, userDetails);
         return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
     }
 
