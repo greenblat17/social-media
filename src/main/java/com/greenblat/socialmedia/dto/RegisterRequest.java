@@ -1,6 +1,9 @@
 package com.greenblat.socialmedia.dto;
 
-public record RegisterRequest(String username,
-                              String email,
-                              String password) {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+
+public record RegisterRequest(@NotNull String username,
+                              @Email String email,
+                              @NotNull String password) {
 }
