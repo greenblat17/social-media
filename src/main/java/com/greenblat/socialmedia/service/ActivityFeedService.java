@@ -2,50 +2,43 @@ package com.greenblat.socialmedia.service;
 
 import com.greenblat.socialmedia.dto.PostDTO;
 import com.greenblat.socialmedia.mapper.PostMapper;
-import com.greenblat.socialmedia.model.Post;
 import com.greenblat.socialmedia.repository.PostRepository;
-import com.greenblat.socialmedia.repository.UserRelationRepository;
 import com.greenblat.socialmedia.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ActivityFeedService {
 
     private final PostRepository postRepository;
-    private final UserRelationRepository userRelationRepository;
     private final UserRepository userRepository;
     private final PostMapper postMapper;
 
-    public List<PostDTO> getPostsByFollowerUser(UserDetails userDetails) {
+    @Value("${spring.data.web.pageable.default-page-size}")
+    private int pageSize;
+
+    public Page<PostDTO> getPostsByFollowerUser(int page, UserDetails userDetails) {
         var user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow();
 
-        var followingUsers = userRelationRepository.findByRelatingUserId(user.getId())
+        var pageRequest = PageRequest.of(
+                page,
+                pageSize,
+                Sort.by("created_at").descending()
+        );
+        var posts = postRepository.findByFollowerUser(pageRequest, user.getId())
                 .stream()
-                .filter(userRelation -> !userRelation.getFollowingUser().getPosts().isEmpty())
+                .map(postMapper::mapToDto)
                 .toList();
 
-        List<PostDTO> activityFeed = new ArrayList<>(followingUsers.size());
-
-        followingUsers.forEach(followingUser -> {
-            var authorId = followingUser.getFollowingUser().getId();
-            var post = postRepository.findByAuthor_Id(authorId)
-                    .stream()
-                    .max(Comparator.comparing(Post::getCreatedAt))
-                    .orElseThrow();
-            activityFeed.add(postMapper.mapToDto(post));
-
-        });
-
-        return activityFeed;
-
+        return new PageImpl<>(posts);
     }
 
 
