@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/")
-    public ResponseEntity<PostDTO> addPost(@RequestBody PostDTO postDTO,
+    public ResponseEntity<PostDTO> addPost(@RequestBody @Validated PostDTO postDTO,
                                            @AuthenticationPrincipal UserDetails userDetails) {
         var savedPost = postService.savePost(postDTO, userDetails);
         return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
@@ -27,7 +28,7 @@ public class PostController {
 
     @PutMapping("/{postId}")
     public ResponseEntity<PostDTO> editPost(@PathVariable Long postId,
-                                            @RequestBody PostDTO postDTO) {
+                                            @RequestBody @Validated PostDTO postDTO) {
         var updatedPost = postService.updatePost(postId, postDTO);
         return new ResponseEntity<>(updatedPost, HttpStatus.ACCEPTED);
     }
