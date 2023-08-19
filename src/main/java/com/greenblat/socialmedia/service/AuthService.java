@@ -3,6 +3,7 @@ package com.greenblat.socialmedia.service;
 import com.greenblat.socialmedia.dto.AuthRequest;
 import com.greenblat.socialmedia.dto.AuthResponse;
 import com.greenblat.socialmedia.dto.RegisterRequest;
+import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.mapper.UserMapper;
 import com.greenblat.socialmedia.model.User;
 import com.greenblat.socialmedia.repository.UserRepository;
@@ -37,7 +38,11 @@ public class AuthService {
         );
         authenticationManager.authenticate(authInputToken);
         var user = userRepository.findByUsername(request.username())
-                .orElseThrow();
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User with username [%s] not found"
+                                        .formatted(request.username())
+                        ));
         return buildAuthResponseWithToken(user);
     }
 

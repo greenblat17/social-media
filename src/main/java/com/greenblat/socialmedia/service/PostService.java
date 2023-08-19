@@ -1,9 +1,9 @@
 package com.greenblat.socialmedia.service;
 
 import com.greenblat.socialmedia.dto.PostDTO;
+import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.mapper.PostMapper;
 import com.greenblat.socialmedia.repository.PostRepository;
-import com.greenblat.socialmedia.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,11 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
     private final PostMapper postMapper;
+    private final UserService userService;
 
     public PostDTO savePost(PostDTO postDTO, UserDetails userDetails) {
-        var user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow();
+        var user = userService.findUser(userDetails.getUsername());
         var post = postMapper.mapToPost(postDTO, user);
         var savedPost = postRepository.save(post);
         return postMapper.mapToDto(savedPost);
@@ -29,7 +28,11 @@ public class PostService {
 
     public PostDTO updatePost(Long id, PostDTO postDTO) {
         var toUpdatePost = postRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Post with ID [%s] not found"
+                                        .formatted(id)
+                        ));
 
         toUpdatePost.setTitle(postDTO.title());
         toUpdatePost.setContent(postDTO.content());

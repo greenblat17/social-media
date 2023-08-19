@@ -1,5 +1,6 @@
 package com.greenblat.socialmedia.service;
 
+import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.model.RelationType;
 import com.greenblat.socialmedia.model.User;
 import com.greenblat.socialmedia.model.UserRelation;
@@ -45,7 +46,12 @@ public class UserService {
             var followingUser = findUser(friendRequestId);
 
             var userRelation = findUserRelation(followingUser, user)
-                    .orElseThrow();
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException(
+                                    "User Relation with followingUserId [%s] and currentUserId [%s] not found"
+                                            .formatted(followingUser.getId(), user.getId())
+                            )
+                    );
 
             if (userRelation.getRelationType().equals(RelationType.FRIEND)) {
                 throw new RuntimeException();
@@ -84,14 +90,22 @@ public class UserService {
                 .findByRelatingUserAndFollowingUser(followingUser, currentUser);
     }
 
-    private User findUser(String username) {
+    protected User findUser(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow();
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User with username [%s] not found"
+                                        .formatted(username)
+                        ));
     }
 
     private User findUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User with ID [%s] not found"
+                                        .formatted(id)
+                        ));
     }
 
     private static UserRelation buildUserRelation(User currentUser,
