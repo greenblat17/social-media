@@ -15,6 +15,7 @@ public class PostMapper {
         return new PostDTO(
                 post.getTitle(),
                 post.getContent(),
+                post.getCreatedAt(),
                 Collections.emptyList()
         );
     }
