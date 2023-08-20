@@ -2,6 +2,7 @@ package com.greenblat.socialmedia.controller;
 
 import com.greenblat.socialmedia.dto.PostDTO;
 import com.greenblat.socialmedia.service.PostService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/post")
 @RequiredArgsConstructor
+@Tag(name = "Post")
 public class PostController {
 
     private final PostService postService;
