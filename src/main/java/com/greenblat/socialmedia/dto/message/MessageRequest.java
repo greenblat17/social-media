@@ -1,4 +1,4 @@
-package com.greenblat.socialmedia.dto;
+package com.greenblat.socialmedia.dto.message;
 
 public record MessageRequest(String username,
                              String text) {

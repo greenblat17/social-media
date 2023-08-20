@@ -1,4 +1,4 @@
-package com.greenblat.socialmedia.dto;
+package com.greenblat.socialmedia.dto.auth;
 
 import com.greenblat.socialmedia.validation.UniqueUserInfo;
 import jakarta.validation.constraints.Email;

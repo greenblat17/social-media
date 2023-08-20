@@ -1,4 +1,4 @@
-package com.greenblat.socialmedia.dto;
+package com.greenblat.socialmedia.dto.post;
 
 import java.time.LocalDateTime;
 import java.util.List;

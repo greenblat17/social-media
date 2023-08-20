@@ -1,6 +1,6 @@
 package com.greenblat.socialmedia.validation.impl;
 
-import com.greenblat.socialmedia.dto.RegisterRequest;
+import com.greenblat.socialmedia.dto.auth.RegisterRequest;
 import com.greenblat.socialmedia.repository.UserRepository;
 import com.greenblat.socialmedia.validation.UniqueUserInfo;
 import jakarta.validation.ConstraintValidator;

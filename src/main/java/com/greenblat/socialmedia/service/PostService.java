@@ -1,7 +1,7 @@
 package com.greenblat.socialmedia.service;
 
-import com.greenblat.socialmedia.dto.PostRequest;
-import com.greenblat.socialmedia.dto.PostResponse;
+import com.greenblat.socialmedia.dto.post.PostRequest;
+import com.greenblat.socialmedia.dto.post.PostResponse;
 import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.mapper.ImageMapper;
 import com.greenblat.socialmedia.mapper.PostMapper;

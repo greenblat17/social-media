@@ -1,6 +1,6 @@
 package com.greenblat.socialmedia.mapper;
 
-import com.greenblat.socialmedia.dto.RegisterRequest;
+import com.greenblat.socialmedia.dto.auth.RegisterRequest;
 import com.greenblat.socialmedia.model.User;
 import com.greenblat.socialmedia.util.Mapper;
 import lombok.RequiredArgsConstructor;

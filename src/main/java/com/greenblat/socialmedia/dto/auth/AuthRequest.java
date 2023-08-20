@@ -1,4 +1,4 @@
-package com.greenblat.socialmedia.dto;
+package com.greenblat.socialmedia.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.UniqueElements;

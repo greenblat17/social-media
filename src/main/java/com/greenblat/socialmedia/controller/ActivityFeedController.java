@@ -1,7 +1,7 @@
 package com.greenblat.socialmedia.controller;
 
-import com.greenblat.socialmedia.dto.PageResponse;
-import com.greenblat.socialmedia.dto.PostResponse;
+import com.greenblat.socialmedia.dto.pagination.PageResponse;
+import com.greenblat.socialmedia.dto.post.PostResponse;
 import com.greenblat.socialmedia.service.ActivityFeedService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

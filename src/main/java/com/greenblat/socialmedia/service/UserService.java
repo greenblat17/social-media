@@ -1,6 +1,6 @@
 package com.greenblat.socialmedia.service;
 
-import com.greenblat.socialmedia.dto.MessageRequest;
+import com.greenblat.socialmedia.dto.message.MessageRequest;
 import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.model.Message;
 import com.greenblat.socialmedia.model.RelationType;

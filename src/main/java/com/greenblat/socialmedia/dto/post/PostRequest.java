@@ -1,4 +1,4 @@
-package com.greenblat.socialmedia.dto;
+package com.greenblat.socialmedia.dto.post;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,8 +1,8 @@
 package com.greenblat.socialmedia.service;
 
-import com.greenblat.socialmedia.dto.AuthRequest;
-import com.greenblat.socialmedia.dto.AuthResponse;
-import com.greenblat.socialmedia.dto.RegisterRequest;
+import com.greenblat.socialmedia.dto.auth.AuthRequest;
+import com.greenblat.socialmedia.dto.auth.AuthResponse;
+import com.greenblat.socialmedia.dto.auth.RegisterRequest;
 import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.mapper.UserMapper;
 import com.greenblat.socialmedia.model.User;

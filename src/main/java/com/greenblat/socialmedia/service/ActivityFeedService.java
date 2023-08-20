@@ -1,6 +1,6 @@
 package com.greenblat.socialmedia.service;
 
-import com.greenblat.socialmedia.dto.PostResponse;
+import com.greenblat.socialmedia.dto.post.PostResponse;
 import com.greenblat.socialmedia.mapper.PostMapper;
 import com.greenblat.socialmedia.repository.PostRepository;
 import lombok.RequiredArgsConstructor;

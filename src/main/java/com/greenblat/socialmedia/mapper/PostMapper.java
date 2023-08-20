@@ -1,7 +1,7 @@
 package com.greenblat.socialmedia.mapper;
 
-import com.greenblat.socialmedia.dto.PostRequest;
-import com.greenblat.socialmedia.dto.PostResponse;
+import com.greenblat.socialmedia.dto.post.PostRequest;
+import com.greenblat.socialmedia.dto.post.PostResponse;
 import com.greenblat.socialmedia.model.Image;
 import com.greenblat.socialmedia.model.Post;
 import com.greenblat.socialmedia.model.User;

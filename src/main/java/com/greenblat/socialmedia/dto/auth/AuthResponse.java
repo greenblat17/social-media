@@ -1,4 +1,4 @@
-package com.greenblat.socialmedia.dto;
+package com.greenblat.socialmedia.dto.auth;
 
 public record AuthResponse(String token) {
 }

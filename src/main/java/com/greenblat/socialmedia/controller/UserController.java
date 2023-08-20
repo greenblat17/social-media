@@ -1,6 +1,6 @@
 package com.greenblat.socialmedia.controller;
 
-import com.greenblat.socialmedia.dto.MessageRequest;
+import com.greenblat.socialmedia.dto.message.MessageRequest;
 import com.greenblat.socialmedia.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
