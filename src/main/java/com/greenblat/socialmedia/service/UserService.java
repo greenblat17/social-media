@@ -1,9 +1,12 @@
 package com.greenblat.socialmedia.service;
 
+import com.greenblat.socialmedia.dto.MessageRequest;
 import com.greenblat.socialmedia.exception.ResourceNotFoundException;
+import com.greenblat.socialmedia.model.Message;
 import com.greenblat.socialmedia.model.RelationType;
 import com.greenblat.socialmedia.model.User;
 import com.greenblat.socialmedia.model.UserRelation;
+import com.greenblat.socialmedia.repository.MessageRepository;
 import com.greenblat.socialmedia.repository.UserRelationRepository;
 import com.greenblat.socialmedia.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserRelationRepository userRelationRepository;
+    private final MessageRepository messageRepository;
 
     @Transactional
     public void followUser(Long followingUserId, UserDetails userDetails) {
@@ -71,6 +75,16 @@ public class UserService {
                 .ifPresent(userRelation -> updateUserRelation(userRelation, RelationType.FOLLOWER));
     }
 
+    @Transactional
+    public void sendMessage(UserDetails userDetails, MessageRequest request) {
+        var sender = findUser(userDetails.getUsername());
+        var recipient = findUser(request.username());
+
+        var message = buildMessage(request, sender, recipient);
+
+        messageRepository.save(message);
+    }
+
     private void acceptFriendRequest(User currentUser,
                                      User userToFriend,
                                      UserRelation followingUserToCurrentUserRelation) {
@@ -115,6 +129,16 @@ public class UserService {
                 .relatingUser(currentUser)
                 .followingUser(followingUser)
                 .relationType(relationType)
+                .build();
+    }
+
+    private static Message buildMessage(MessageRequest request,
+                                        User sender,
+                                        User recipient) {
+        return Message.builder()
+                .sender(sender)
+                .recipient(recipient)
+                .text(request.text())
                 .build();
     }
 }
