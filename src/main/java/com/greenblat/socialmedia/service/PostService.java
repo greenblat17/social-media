@@ -39,12 +39,7 @@ public class PostService {
     }
 
     public PostResponse updatePost(Long id, PostRequest request) {
-        var toUpdatePost = postRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Post with ID [%s] not found"
-                                        .formatted(id)
-                        ));
+        var toUpdatePost = findPost(id);
 
         toUpdatePost.setTitle(request.title());
         toUpdatePost.setContent(request.content());
@@ -56,6 +51,7 @@ public class PostService {
     }
 
     public void deletePost(Long id) {
+        findPost(id);
         postRepository.deleteById(id);
     }
 
@@ -67,6 +63,15 @@ public class PostService {
                     return postMapper.mapToDto(post, postsImages);
                 })
                 .collect(Collectors.toList());
+    }
+
+    private Post findPost(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Post with ID [%s] not found"
+                                        .formatted(id)
+                        ));
     }
 
     @SneakyThrows
