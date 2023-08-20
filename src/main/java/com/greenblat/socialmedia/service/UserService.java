@@ -1,6 +1,7 @@
 package com.greenblat.socialmedia.service;
 
 import com.greenblat.socialmedia.dto.message.MessageRequest;
+import com.greenblat.socialmedia.exception.FriendRelationAlreadyExistsException;
 import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.model.Message;
 import com.greenblat.socialmedia.model.RelationType;
@@ -58,7 +59,10 @@ public class UserService {
                     );
 
             if (userRelation.getRelationType().equals(RelationType.FRIEND)) {
-                throw new RuntimeException();
+                throw new FriendRelationAlreadyExistsException(
+                        "User with id [%s] and [%s] are friends"
+                                .formatted(friendRequestId, user.getId())
+                );
             }
 
             acceptFriendRequest(user, followingUser, userRelation);

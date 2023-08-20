@@ -27,6 +27,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(FriendRelationAlreadyExistsException.class)
+    public ResponseEntity<ErrorDetailsResponse> handleFriendRelationAlreadyExistsException(FriendRelationAlreadyExistsException e,
+                                                                                WebRequest webRequest) {
+        var errorDetails = new ErrorDetailsResponse(
+                LocalDateTime.now(),
+                e.getMessage(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<FieldValidationResponse>> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
