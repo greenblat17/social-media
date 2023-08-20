@@ -2,6 +2,7 @@ package com.greenblat.socialmedia.service;
 
 import com.greenblat.socialmedia.dto.message.MessageRequest;
 import com.greenblat.socialmedia.exception.FriendRelationAlreadyExistsException;
+import com.greenblat.socialmedia.exception.RejectFriendRequestException;
 import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.model.Message;
 import com.greenblat.socialmedia.model.RelationType;
@@ -46,27 +47,32 @@ public class UserService {
     public void requestToFriend(Long friendRequestId,
                                 UserDetails userDetails,
                                 boolean isFriend) {
-        if (isFriend) {
-            var user = findUser(userDetails.getUsername());
-            var followingUser = findUser(friendRequestId);
+        var user = findUser(userDetails.getUsername());
 
-            var userRelation = findUserRelation(followingUser, user)
-                    .orElseThrow(() ->
-                            new ResourceNotFoundException(
-                                    "User Relation with followingUserId [%s] and currentUserId [%s] not found"
-                                            .formatted(followingUser.getId(), user.getId())
-                            )
-                    );
-
-            if (userRelation.getRelationType().equals(RelationType.FRIEND)) {
-                throw new FriendRelationAlreadyExistsException(
-                        "User with id [%s] and [%s] are friends"
-                                .formatted(friendRequestId, user.getId())
-                );
-            }
-
-            acceptFriendRequest(user, followingUser, userRelation);
+        if (!isFriend) {
+            throw new RejectFriendRequestException(
+                    "User with id [%s] reject friend request from user with id [%s]"
+                            .formatted(user.getId(), friendRequestId)
+            );
         }
+
+        var followingUser = findUser(friendRequestId);
+
+        var userRelation = findUserRelation(followingUser, user)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User Relation with followingUserId [%s] and currentUserId [%s] not found"
+                                        .formatted(followingUser.getId(), user.getId())
+                        )
+                );
+        if (userRelation.getRelationType().equals(RelationType.FRIEND)) {
+            throw new FriendRelationAlreadyExistsException(
+                    "User with id [%s] and [%s] are friends"
+                            .formatted(friendRequestId, user.getId())
+            );
+        }
+
+        acceptFriendRequest(user, followingUser, userRelation);
     }
 
     @Transactional

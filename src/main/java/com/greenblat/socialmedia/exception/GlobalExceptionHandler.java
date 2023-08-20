@@ -29,7 +29,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FriendRelationAlreadyExistsException.class)
     public ResponseEntity<ErrorDetailsResponse> handleFriendRelationAlreadyExistsException(FriendRelationAlreadyExistsException e,
-                                                                                WebRequest webRequest) {
+                                                                                           WebRequest webRequest) {
+        var errorDetails = new ErrorDetailsResponse(
+                LocalDateTime.now(),
+                e.getMessage(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(RejectFriendRequestException.class)
+    public ResponseEntity<ErrorDetailsResponse> handleRejectFriendRequestException(RejectFriendRequestException e,
+                                                                                   WebRequest webRequest) {
         var errorDetails = new ErrorDetailsResponse(
                 LocalDateTime.now(),
                 e.getMessage(),
