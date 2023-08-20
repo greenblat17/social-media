@@ -1,5 +1,6 @@
 package com.greenblat.socialmedia.controller;
 
+import com.greenblat.socialmedia.dto.MessageRequest;
 import com.greenblat.socialmedia.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,15 @@ public class UserController {
     public ResponseEntity<Void> unfollow(@PathVariable Long followingId,
                                          @AuthenticationPrincipal UserDetails userDetails) {
         userService.unfollowUser(followingId, userDetails);
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @PostMapping("/send-message")
+    public ResponseEntity<Void> sendMessage(@AuthenticationPrincipal UserDetails userDetails,
+                                            @RequestBody MessageRequest messageRequest) {
+        userService.sendMessage(userDetails, messageRequest);
         return ResponseEntity
                 .ok()
                 .build();
