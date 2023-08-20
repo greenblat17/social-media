@@ -1,9 +1,9 @@
 package com.greenblat.socialmedia.controller;
 
+import com.greenblat.socialmedia.controller.documentation.PostDocumentation;
 import com.greenblat.socialmedia.dto.post.PostRequest;
 import com.greenblat.socialmedia.dto.post.PostResponse;
 import com.greenblat.socialmedia.service.PostService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/post")
 @RequiredArgsConstructor
-@Tag(name = "Post")
-public class PostController {
+public class PostController implements PostDocumentation {
 
     private final PostService postService;
 
@@ -39,7 +38,7 @@ public class PostController {
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/by-user/{userId}")
