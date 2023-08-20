@@ -37,4 +37,10 @@ public class User {
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Post> posts;
+
+    @OneToMany(
+            mappedBy = "sender",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<Message> messages;
 }
