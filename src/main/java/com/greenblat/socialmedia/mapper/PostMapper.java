@@ -1,29 +1,28 @@
 package com.greenblat.socialmedia.mapper;
 
-import com.greenblat.socialmedia.dto.PostDTO;
+import com.greenblat.socialmedia.dto.PostRequest;
+import com.greenblat.socialmedia.dto.PostResponse;
 import com.greenblat.socialmedia.model.Image;
 import com.greenblat.socialmedia.model.Post;
 import com.greenblat.socialmedia.model.User;
 import com.greenblat.socialmedia.util.Mapper;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Mapper
 public class PostMapper {
 
-    public PostDTO mapToDto(Post post) {
-        return new PostDTO(
+    public PostResponse mapToDto(Post post, List<byte[]> bytes) {
+        return new PostResponse(
                 post.getTitle(),
                 post.getContent(),
                 post.getCreatedAt(),
-                Collections.emptyList()
+                bytes
         );
     }
 
-    public Post mapToPost(PostDTO dto, User user, List<Image> images) {
-
+    public Post mapToPost(PostRequest dto, User user, List<Image> images) {
         return Post.builder()
                 .author(user)
                 .title(dto.title())

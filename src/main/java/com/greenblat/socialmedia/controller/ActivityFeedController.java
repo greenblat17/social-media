@@ -1,7 +1,7 @@
 package com.greenblat.socialmedia.controller;
 
 import com.greenblat.socialmedia.dto.PageResponse;
-import com.greenblat.socialmedia.dto.PostDTO;
+import com.greenblat.socialmedia.dto.PostResponse;
 import com.greenblat.socialmedia.service.ActivityFeedService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,8 @@ public class ActivityFeedController {
     private final ActivityFeedService activityFeedService;
 
     @GetMapping("/posts")
-    public ResponseEntity<PageResponse<PostDTO>> getPosts(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                  @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<PageResponse<PostResponse>> getPosts(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                               @AuthenticationPrincipal UserDetails userDetails) {
         var posts = activityFeedService.getPostsByFollowerUser(page, userDetails);
         return ResponseEntity.ok(PageResponse.of(posts));
     }

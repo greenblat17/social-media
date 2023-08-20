@@ -1,6 +1,7 @@
 package com.greenblat.socialmedia.controller;
 
-import com.greenblat.socialmedia.dto.PostDTO;
+import com.greenblat.socialmedia.dto.PostRequest;
+import com.greenblat.socialmedia.dto.PostResponse;
 import com.greenblat.socialmedia.service.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,16 +23,16 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/")
-    public ResponseEntity<PostDTO> addPost(@RequestBody @Validated PostDTO postDTO,
-                                           @AuthenticationPrincipal UserDetails userDetails) {
-        var savedPost = postService.savePost(postDTO, userDetails);
+    public ResponseEntity<PostResponse> addPost(@RequestBody @Validated PostRequest postRequest,
+                                                @AuthenticationPrincipal UserDetails userDetails) {
+        var savedPost = postService.savePost(postRequest, userDetails);
         return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<PostDTO> editPost(@PathVariable Long postId,
-                                            @RequestBody @Validated PostDTO postDTO) {
-        var updatedPost = postService.updatePost(postId, postDTO);
+    public ResponseEntity<PostResponse> editPost(@PathVariable Long postId,
+                                                 @RequestBody @Validated PostRequest postRequest) {
+        var updatedPost = postService.updatePost(postId, postRequest);
         return new ResponseEntity<>(updatedPost, HttpStatus.ACCEPTED);
     }
 
@@ -42,7 +43,7 @@ public class PostController {
     }
 
     @GetMapping("/by-user/{userId}")
-    public ResponseEntity<List<PostDTO>> getUserPosts(@PathVariable Long userId) {
+    public ResponseEntity<List<PostResponse>> getUserPosts(@PathVariable Long userId) {
         var posts = postService.getPostsByUser(userId);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
