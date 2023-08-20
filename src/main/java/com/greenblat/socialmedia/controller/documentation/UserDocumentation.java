@@ -65,6 +65,16 @@ public interface UserDocumentation {
                                     )
                             }
                     ),
+                    @ApiResponse(
+                            description = "Conflict",
+                            responseCode = "409",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            schema = @Schema(implementation = ErrorDetailsResponse.class)
+                                    )
+                            }
+                    ),
             }
     )
     ResponseEntity<Void> requestToFriend(@Parameter(description = "ID of user who will friend") Long friendId,
