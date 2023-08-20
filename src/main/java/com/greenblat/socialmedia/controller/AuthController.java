@@ -1,10 +1,10 @@
 package com.greenblat.socialmedia.controller;
 
+import com.greenblat.socialmedia.controller.documentation.AuthDocumentation;
 import com.greenblat.socialmedia.dto.auth.AuthRequest;
 import com.greenblat.socialmedia.dto.auth.AuthResponse;
 import com.greenblat.socialmedia.dto.auth.RegisterRequest;
 import com.greenblat.socialmedia.service.AuthService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication")
-public class AuthController {
+public class AuthController implements AuthDocumentation {
 
     private final AuthService authService;
 
