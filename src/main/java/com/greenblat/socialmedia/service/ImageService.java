@@ -1,5 +1,6 @@
 package com.greenblat.socialmedia.service;
 
+import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.model.Image;
 import com.greenblat.socialmedia.model.Post;
 import com.greenblat.socialmedia.repository.ImageRepository;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
@@ -36,6 +39,24 @@ public class ImageService {
 
             imageRepository.save(image);
         }
+    }
+
+    @SneakyThrows
+    public byte[] get(String imagePath) {
+        var fullImagePath = Path.of(bucket, imagePath);
+        if (!Files.exists(fullImagePath))
+            throw new ResourceNotFoundException("File with path [%s] not found".formatted(imagePath));
+        return Files.readAllBytes(fullImagePath);
+    }
+
+    public List<byte[]> getPostsImages(Post post) {
+        var images = post.getImages();
+        List<byte[]> imagesBytes = new ArrayList<>(images.size());
+        for (Image image : images) {
+            var bytes = get(image.getFilename());
+            imagesBytes.add(bytes);
+        }
+        return imagesBytes;
     }
 
     private static Image buildImage(String imagePath, Post post) {

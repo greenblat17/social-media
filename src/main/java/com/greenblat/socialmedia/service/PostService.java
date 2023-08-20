@@ -1,6 +1,7 @@
 package com.greenblat.socialmedia.service;
 
-import com.greenblat.socialmedia.dto.PostDTO;
+import com.greenblat.socialmedia.dto.PostRequest;
+import com.greenblat.socialmedia.dto.PostResponse;
 import com.greenblat.socialmedia.exception.ResourceNotFoundException;
 import com.greenblat.socialmedia.mapper.ImageMapper;
 import com.greenblat.socialmedia.mapper.PostMapper;
@@ -25,18 +26,19 @@ public class PostService {
     private final UserService userService;
     private final ImageService imageService;
 
-    public PostDTO savePost(PostDTO postDTO, UserDetails userDetails) {
+    public PostResponse savePost(PostRequest request, UserDetails userDetails) {
         var user = userService.findUser(userDetails.getUsername());
-        var images = imageMapper.mapToListImage(postDTO.images());
-        var post = postMapper.mapToPost(postDTO, user, images);
+        var images = imageMapper.mapToListImage(request.images());
+        var post = postMapper.mapToPost(request, user, images);
 
-        uploadImage(postDTO.images(), post);
-
+        uploadImage(request.images(), post);
         var savedPost = postRepository.save(post);
-        return postMapper.mapToDto(savedPost);
+        var postsImages = imageService.getPostsImages(savedPost);
+
+        return postMapper.mapToDto(savedPost, postsImages);
     }
 
-    public PostDTO updatePost(Long id, PostDTO postDTO) {
+    public PostResponse updatePost(Long id, PostRequest request) {
         var toUpdatePost = postRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
@@ -44,21 +46,26 @@ public class PostService {
                                         .formatted(id)
                         ));
 
-        toUpdatePost.setTitle(postDTO.title());
-        toUpdatePost.setContent(postDTO.content());
+        toUpdatePost.setTitle(request.title());
+        toUpdatePost.setContent(request.content());
 
         var updatedPost = postRepository.save(toUpdatePost);
-        return postMapper.mapToDto(updatedPost);
+        var postsImages = imageService.getPostsImages(updatedPost);
+
+        return postMapper.mapToDto(updatedPost, postsImages);
     }
 
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }
 
-    public List<PostDTO> getPostsByUser(Long userId) {
+    public List<PostResponse> getPostsByUser(Long userId) {
         var posts = postRepository.findByAuthor_Id(userId);
         return posts.stream()
-                .map(postMapper::mapToDto)
+                .map(post -> {
+                    var postsImages = imageService.getPostsImages(post);
+                    return postMapper.mapToDto(post, postsImages);
+                })
                 .collect(Collectors.toList());
     }
 

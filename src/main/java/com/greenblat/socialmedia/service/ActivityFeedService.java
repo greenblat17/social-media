@@ -1,6 +1,6 @@
 package com.greenblat.socialmedia.service;
 
-import com.greenblat.socialmedia.dto.PostDTO;
+import com.greenblat.socialmedia.dto.PostResponse;
 import com.greenblat.socialmedia.mapper.PostMapper;
 import com.greenblat.socialmedia.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +16,12 @@ public class ActivityFeedService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
     private final UserService userService;
+    private final ImageService imageService;
 
     @Value("${spring.data.web.pageable.default-page-size}")
     private int pageSize;
 
-    public Page<PostDTO> getPostsByFollowerUser(int page, UserDetails userDetails) {
+    public Page<PostResponse> getPostsByFollowerUser(int page, UserDetails userDetails) {
         var user = userService.findUser(userDetails.getUsername());
 
         var pageRequest = PageRequest.of(
@@ -30,7 +31,10 @@ public class ActivityFeedService {
         );
 
         return postRepository.findByFollowerUser(pageRequest, user.getId())
-                .map(postMapper::mapToDto);
+                .map(post -> {
+                    var postsImages = imageService.getPostsImages(post);
+                    return postMapper.mapToDto(post, postsImages);
+                });
 
     }
 
