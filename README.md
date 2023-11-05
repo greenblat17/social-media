@@ -238,3 +238,4 @@ Start the server
 
 - Add OAuth2 authentication
 
+- Add docker-compose file
