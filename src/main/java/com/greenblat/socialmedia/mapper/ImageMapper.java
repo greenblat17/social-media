@@ -1,7 +1,6 @@
 package com.greenblat.socialmedia.mapper;
 
 import com.greenblat.socialmedia.model.Image;
-import com.greenblat.socialmedia.util.Mapper;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;

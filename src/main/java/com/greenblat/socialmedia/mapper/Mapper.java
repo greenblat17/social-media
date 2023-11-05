@@ -1,4 +1,4 @@
-package com.greenblat.socialmedia.util;
+package com.greenblat.socialmedia.mapper;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;

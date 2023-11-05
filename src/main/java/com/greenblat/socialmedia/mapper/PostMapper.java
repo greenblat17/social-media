@@ -5,7 +5,6 @@ import com.greenblat.socialmedia.dto.post.PostResponse;
 import com.greenblat.socialmedia.model.Image;
 import com.greenblat.socialmedia.model.Post;
 import com.greenblat.socialmedia.model.User;
-import com.greenblat.socialmedia.util.Mapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
